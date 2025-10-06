@@ -130,11 +130,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     `;
     }
 
-    const validReviewComments = reviewComments.filter(c => c.body).sort((a, b) => {
-        const lineA = a.line ?? a.original_line ?? 0;
-        const lineB = b.line ?? b.original_line ?? 0;
-        return lineA - lineB;
-    });;
+    const validReviewComments = reviewComments.filter(c => c.body);
 
     if (validReviewComments.length > 0) {
         html += `
@@ -142,12 +138,16 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
       <div class="section-header">
         <h4>📄 Review Comments (${validReviewComments.length})</h4>
       </div>
-      ${validReviewComments.map(c => `
-        <div class="comment review">
-          <div class="comment-meta">${escapeHtml(c.user.login)} on ${escapeHtml(c.path)}:${c.line || c.original_line}</div>
-          <div class="comment-body">${escapeHtml(c.body)}</div>
-        </div>
-      `).join('')}
+      ${validReviewComments
+                .sort((a, b) => (a.line ?? a.original_line ?? 0) - (b.line ?? b.original_line ?? 0))
+                .map(c => `
+          <div class="comment review">
+            <div class="comment-meta">
+              ${escapeHtml(c.user.login)} on ${escapeHtml(c.path)}:${c.line || c.original_line}
+            </div>
+            <div class="comment-body">${escapeHtml(c.body)}</div>
+          </div>
+        `).join('')}
     </div>
   `;
     }
