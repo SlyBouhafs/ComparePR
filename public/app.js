@@ -63,12 +63,12 @@ async function fetchFromGitHub(url) {
 }
 
 async function loadPR(index) {
-    const input = document.getElementById(`pr${index}Input`);
-    const error = document.getElementById(`pr${index}Error`);
-    const errorText = document.getElementById(`pr${index}ErrorText`);
-    const loading = document.getElementById(`pr${index}Loading`);
-    const content = document.getElementById(`pr${index}Content`);
-    const btn = document.getElementById(`pr${index}Btn`);
+    const input = document.getElementById(`pr${index} Input`);
+    const error = document.getElementById(`pr${index} Error`);
+    const errorText = document.getElementById(`pr${index} ErrorText`);
+    const loading = document.getElementById(`pr${index} Loading`);
+    const content = document.getElementById(`pr${index} Content`);
+    const btn = document.getElementById(`pr${index} Btn`);
 
     const prUrl = input.value.trim();
     const parsed = parsePRUrl(prUrl);
@@ -130,21 +130,26 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     `;
     }
 
-    const validReviewComments = reviewComments.filter(c => c.body);
+    const validReviewComments = reviewComments.filter(c => c.body).sort((a, b) => {
+        const lineA = a.line ?? a.original_line ?? 0;
+        const lineB = b.line ?? b.original_line ?? 0;
+        return lineA - lineB;
+    });;
+
     if (validReviewComments.length > 0) {
         html += `
-      <div class="comment-section">
-        <div class="section-header">
-          <h4>📄 Review Comments (${validReviewComments.length})</h4>
-        </div>
-        ${validReviewComments.map(c => `
-          <div class="comment review">
-            <div class="comment-meta">${escapeHtml(c.user.login)} on ${escapeHtml(c.path)}:${c.line || c.original_line}</div>
-            <div class="comment-body">${escapeHtml(c.body)}</div>
-          </div>
-        `).join('')}
+    <div class="comment-section">
+      <div class="section-header">
+        <h4>📄 Review Comments (${validReviewComments.length})</h4>
       </div>
-    `;
+      ${validReviewComments.map(c => `
+        <div class="comment review">
+          <div class="comment-meta">${escapeHtml(c.user.login)} on ${escapeHtml(c.path)}:${c.line || c.original_line}</div>
+          <div class="comment-body">${escapeHtml(c.body)}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
     }
 
     const validReviews = reviews.filter(r => r.body);
