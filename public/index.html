@@ -12,10 +12,8 @@
 <body>
     <div class="header">
         <div class="header-content">
-            <img src="/assets/logo.svg" alt="logo">
-            <h1>
-                PR Comparison Helper
-            </h1>
+            <img src="/assets/logo.svg" alt="logo" height="64" width="64">
+            <h2>Github PR Comparator</h2>
             <button id="disconnectBtn" class="hidden">Disconnect</button>
         </div>
     </div>
@@ -55,7 +53,10 @@
             <div id="pr1Loading" class="loading hidden">
                 <div class="spinner"></div>
             </div>
-            <div id="pr1Content" class="pr-content"></div>
+            <div id="pr1Content" class="pr-content">
+                <p class="placeholder">Add PR url in the input above and click fetch to fetch
+                    details.</p>
+            </div>
         </div>
 
         <div class="pr-pane">
@@ -71,7 +72,10 @@
             <div id="pr2Loading" class="loading hidden">
                 <div class="spinner"></div>
             </div>
-            <div id="pr2Content" class="pr-content"></div>
+            <div id="pr2Content" class="pr-content">
+                <p class="placeholder">Add PR url in the input above and click fetch to fetch
+                    details.</p>
+            </div>
         </div>
 
         <div class="pr-pane">
@@ -87,7 +91,10 @@
             <div id="pr3Loading" class="loading hidden">
                 <div class="spinner"></div>
             </div>
-            <div id="pr3Content" class="pr-content"></div>
+            <div id="pr3Content" class="pr-content">
+                <p class="placeholder">Add PR url in the input above and click fetch to fetch
+                    details.</p>
+            </div>
         </div>
     </div>
     <script type="module" src="https://md-block.verou.me/md-block.js"></script>

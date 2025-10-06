@@ -190,7 +190,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     }
 
     if (generalComments.length === 0 && validReviewComments.length === 0 && validReviews.length === 0) {
-        html += '<p style="text-align: center; padding: 40px;">No comments found for this PR.</p>';
+        html += '<p class="placeholder error">⚠️ No comments found for this PR.</p>';
     }
 
     container.innerHTML = html;
