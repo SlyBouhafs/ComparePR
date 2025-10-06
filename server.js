@@ -8,7 +8,19 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+
+// Serve static files with correct MIME types
+app.use(express.static('public', {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.js')) {
+            res.setHeader('Content-Type', 'application/javascript');
+        } else if (filePath.endsWith('.css')) {
+            res.setHeader('Content-Type', 'text/css');
+        } else if (filePath.endsWith('.html')) {
+            res.setHeader('Content-Type', 'text/html');
+        }
+    }
+}));
 
 // Proxy endpoint for GitHub API
 app.post('/api/github-proxy', async (req, res) => {
@@ -35,10 +47,11 @@ app.post('/api/github-proxy', async (req, res) => {
     }
 });
 
+// Catch-all route for SPA - must be last
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`);
 });
