@@ -63,14 +63,14 @@ async function fetchFromGitHub(url) {
 }
 
 async function loadPR(index) {
-    const input = document.getElementById(`pr${index} Input`);
-    const error = document.getElementById(`pr${index} Error`);
-    const errorText = document.getElementById(`pr${index} ErrorText`);
-    const loading = document.getElementById(`pr${index} Loading`);
-    const content = document.getElementById(`pr${index} Content`);
-    const btn = document.getElementById(`pr${index} Btn`);
+    const input = document.getElementById(`pr${index}Input`);
+    const error = document.getElementById(`pr${index}Error`);
+    const errorText = document.getElementById(`pr${index}ErrorText`);
+    const loading = document.getElementById(`pr${index}Loading`);
+    const content = document.getElementById(`pr${index}Content`);
+    const btn = document.getElementById(`pr${index}Btn`);
 
-    const prUrl = input.value.trim();
+    const prUrl = input.value;
     const parsed = parsePRUrl(prUrl);
 
     if (!parsed) {
