@@ -1,3 +1,4 @@
+
 let token = localStorage.getItem('githubToken') || '';
 
 if (token) {
@@ -105,49 +106,64 @@ async function loadPR(index) {
 }
 
 function renderPRContent(container, pr, comments, reviewComments, reviews) {
+    console.log(pr);
     let html = `
     <div class="pr-info">
-      <h3>${escapeHtml(pr.title)}</h3>
-      <p><strong>#${pr.number}</strong> by ${escapeHtml(pr.user.login)}</p>
-      <p>State: ${pr.state} • Base: ${pr.base.ref} ← Head: ${pr.head.ref}</p>
+      <h3><a href="${pr.html_url}" target="_blank" rel="noopener noreferrer"> 🔗 </a>${escapeHtml(pr.title)}</h3>
+        <p><strong>${pr.changed_files} files changed</strong> • <strong class="add"> +${pr.additions}</strong> <strong class="rem">-${pr.deletions}</strong></span>
+      <!-- <p><strong>#${pr.number}</strong> by ${escapeHtml(pr.user.login)}</p> -->
+      
+      <!-- <p>State: ${pr.state} • Base: ${pr.base.ref} ← Head: ${pr.head.ref}</p> -->
     </div>
   `;
 
     const generalComments = comments.filter(c => c.body);
     if (generalComments.length > 0) {
         html += `
-      <div class="comment-section">
-        <div class="section-header">
-          <h4>💬 General Comments (${generalComments.length})</h4>
+            <div class="comment-section">\
+                    <details open >
+                    <summary class="section-header">
+                    💬 General Comments (${generalComments.length})
+                    </summary>
+                ${generalComments.map(c => `
+                <div class="comment general">
+                <details open>
+                    <summary class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</summary>
+                    <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
+                </details>
+                </div>
+
+                `).join('')}
+            </details>
         </div>
-        ${generalComments.map(c => `
-          <div class="comment general">
-            <div class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</div>
-            <div class="comment-body">${escapeHtml(c.body)}</div>
-          </div>
-        `).join('')}
-      </div>
+
+
     `;
     }
 
     const validReviewComments = reviewComments.filter(c => c.body);
-
     if (validReviewComments.length > 0) {
         html += `
     <div class="comment-section">
-      <div class="section-header">
-        <h4>📄 Review Comments (${validReviewComments.length})</h4>
-      </div>
-      ${validReviewComments
+        <details open>
+            <summary class="section-header">
+                📄 Review Comments (${validReviewComments.length})
+            </summary>
+            ${validReviewComments
                 .sort((a, b) => (a.line ?? a.original_line ?? 0) - (b.line ?? b.original_line ?? 0))
                 .map(c => `
-          <div class="comment review">
-            <div class="comment-meta">
-              ${escapeHtml(c.user.login)} on ${escapeHtml(c.path)}:${c.line || c.original_line}
+
+          <div class="comment review ${escapeHtml(c.body).includes(" bad",) ? "negative" : "positive"}">
+            <details open>
+            <summary class="comment-meta">
+              ${escapeHtml(c.path)}:${c.line || c.original_line}
+            </summary>
+            <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
+            </details>
             </div>
-            <div class="comment-body">${escapeHtml(c.body)}</div>
-          </div>
-        `).join('')}
+
+          `).join('')}
+        </details>
     </div>
   `;
     }
@@ -156,21 +172,25 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     if (validReviews.length > 0) {
         html += `
       <div class="comment-section">
-        <div class="section-header">
-          <h4>🔍 Reviews (${validReviews.length})</h4>
-        </div>
+      <details open>
+        <summary class="section-header">
+          🔍 Reviews (${validReviews.length})
+        </summary>
         ${validReviews.map(r => `
           <div class="comment summary">
-            <div class="comment-meta">${escapeHtml(r.user.login)} • ${r.state}</div>
-            <div class="comment-body">${escapeHtml(r.body)}</div>
+            <details open>
+              <summary class="comment-meta">${escapeHtml(r.user.login)} • ${r.state}</summary>
+              <div class="comment-body"><md-block>${escapeHtml(r.body)}</md-block></div>
+            </details>
           </div>
         `).join('')}
+        </details>
       </div>
     `;
     }
 
     if (generalComments.length === 0 && validReviewComments.length === 0 && validReviews.length === 0) {
-        html += '<p style="text-align: center; color: #6b7280; padding: 40px;">No comments found for this PR.</p>';
+        html += '<p style="text-align: center; padding: 40px;">No comments found for this PR.</p>';
     }
 
     container.innerHTML = html;
