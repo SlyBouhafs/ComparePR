@@ -474,8 +474,8 @@ details ::marker {
     opacity: 0;
     transition: all 0.2s;
     position: absolute;
-    top: 0px;
-    right: -5px;
+    top: -6px;
+    right: -10px;
     display: flex;
     flex-direction: column;
     gap: 5px;

@@ -161,7 +161,6 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                 <details open>
                     <div class="shortcuts">
                         <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
-                        <span>Copied!</span>
                         <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx bx-link'></i></a>
                     </div>
                     <summary class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</summary>
@@ -191,10 +190,10 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
 
                   <div class="comment review ${escapeHtml(c.body).includes(" bad") ? "negative" : "positive"}">
                     <details open>
-                    <div class="shortcuts">
-                        <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
-                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx bx-link'></i></a>
-                    </div>
+                        <div class="shortcuts">
+                            <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
+                            <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                        </div>
                     <summary class="comment-meta">
                       ${escapeHtml(c.path.length <= 40 ? c.path : '...' + c.path.slice(c.path.length - 37, c.path.length))}:${c.line || c.original_line}
                     </summary>
@@ -219,10 +218,10 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
         ${validReviews.map(r => `
           <div class="comment summary">
             <details open>
-                    <div class="shortcuts">
-                        <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
-                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
-                    </div>
+                <div class="shortcuts">
+                    <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
+                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                </div>
                 <summary class="comment-meta">${escapeHtml(r.user.login)} • ${r.state}</summary>
                 <div class="comment-body"><md-block>${escapeHtml(r.body)}</md-block></div>
             </details>
