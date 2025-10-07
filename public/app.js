@@ -114,8 +114,11 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     console.log(pr);
     let html = `
     <div class="pr-info">
-      <h3><a href="${pr.html_url}" target="_blank" rel="noopener noreferrer"> 🔗 </a>${escapeHtml(pr.title)}</h3>
-      <div class="changes">
+        <div class="pr-header">
+        <h3>${escapeHtml(pr.title)}</h3>
+        <a href="${pr.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a> 
+        </div>
+        <div class="changes">
         <p><strong>${pr.changed_files <= 1 ? pr.changed_files + " file" : pr.changed_files + " files"} changed  ± </strong>
         <p><strong class="add"> +${pr.additions}</strong> <strong class="rem">-${pr.deletions}</strong></p>
       <!-- <p><strong>#${pr.number}</strong> by ${escapeHtml(pr.user.login)}</p> -->
@@ -135,6 +138,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                 ${generalComments.map(c => `
                 <div class="comment general">
                 <details open>
+                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx bx-link'></i></a>
                     <summary class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</summary>
                     <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
                     <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
@@ -167,6 +171,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
             <summary class="comment-meta">
               ${escapeHtml(c.path)}:${c.line || c.original_line}
             </summary>
+            <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
             <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
             </details>
             </div>
@@ -188,8 +193,9 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
         ${validReviews.map(r => `
           <div class="comment summary">
             <details open>
+                <a href="${r.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
                 <summary class="comment-meta">${escapeHtml(r.user.login)} • ${r.state}</summary>
-                <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
+                <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(r.body)}')"><i class='bx bxs-copy'></i></button>
                 <div class="comment-body"><md-block>${escapeHtml(r.body)}</md-block></div>
             </details>
           </div>

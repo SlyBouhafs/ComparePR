@@ -356,6 +356,13 @@ body {
     align-items: flex-end;
 }
 
+.pr-info .pr-header {
+    display: flex;
+    gap: 5px;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
 .comment-section {
     margin-bottom: 24px;
     background: var(--background);
@@ -454,17 +461,31 @@ details .copy-btn {
 
 }
 
+
 details .copy-btn i {
     font-size: 16px;
     color: var(--white);
     transition: all 0.2s;
 }
 
-details .copy-btn i:hover {
-    color: var(--white-hover);
+details a i {
+    color: var(--cyan);
+    text-decoration: none;
+    position: absolute;
+    top: 0px;
+    right: 20px;
+    transition: all 0.2s;
 }
 
-details .copy-btn i:active {
+details a i:hover,
+details .copy-btn i:hover,
+a:hover {
+    color: var(--f-cyan);
+}
+
+details .copy-btn i:active,
+details a i:active,
+a:active {
     color: var(--cyan);
 }
 
@@ -480,11 +501,8 @@ details .copy-btn i:active {
 
 a {
     color: var(--cyan);
+    transition: all 0.2s;
     text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
 }
 
 @media (max-width: 1200px) {
