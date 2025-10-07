@@ -26,9 +26,27 @@ document.getElementById('pr1Btn').addEventListener('click', () => loadPR(1));
 document.getElementById('pr2Btn').addEventListener('click', () => loadPR(2));
 document.getElementById('pr3Btn').addEventListener('click', () => loadPR(3));
 
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text)
-};
+document.addEventListener('click', e => {
+    const btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    const content = btn.dataset.copy;
+    copyToClipboard(content, btn);
+});
+
+async function copyToClipboard(content, element) {
+    try {
+        await navigator.clipboard.writeText(content);
+        const span = element.querySelector('span');
+        span.style.visibility = 'visible';
+        span.style.opacity = '1';
+        setTimeout(() => {
+            span.style.visibility = 'hidden';
+            span.style.opacity = '0';
+        }, 500);
+    } catch (err) {
+        console.error('Failed to copy text:', err);
+    }
+}
 
 function showMainContent() {
     document.getElementById('loginScreen').classList.add('hidden');
@@ -142,8 +160,9 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                 <div class="comment general">
                 <details open>
                     <div class="shortcuts">
-                        <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
-                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                        <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
+                        <span>Copied!</span>
+                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx bx-link'></i></a>
                     </div>
                     <summary class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</summary>
                     <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
@@ -173,8 +192,8 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                   <div class="comment review ${escapeHtml(c.body).includes(" bad") ? "negative" : "positive"}">
                     <details open>
                     <div class="shortcuts">
-                    <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
-                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                        <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
+                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx bx-link'></i></a>
                     </div>
                     <summary class="comment-meta">
                       ${escapeHtml(c.path.length <= 40 ? c.path : '...' + c.path.slice(c.path.length - 37, c.path.length))}:${c.line || c.original_line}

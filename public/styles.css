@@ -514,6 +514,19 @@ a:active {
     color: var(--cyan);
 }
 
+
+.shortcuts span {
+    font-size: 10px;
+    color: var(--white);
+    font-weight: 600;
+    position: absolute;
+    bottom: 55px;
+    visibility: hidden;
+    opacity: 0;
+    left: -8px;
+    transition: all 0.2s;
+}
+
 .add {
     color: var(--red);
 }
