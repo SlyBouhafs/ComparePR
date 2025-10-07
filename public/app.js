@@ -175,36 +175,69 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
 
     `;
     }
-
     const validReviewComments = reviewComments.filter(c => c.body);
     if (validReviewComments.length > 0) {
+        // Group comments by file path
+        const commentsByFile = validReviewComments.reduce((acc, comment) => {
+            const path = comment.path;
+            if (!acc[path]) {
+                acc[path] = [];
+            }
+            acc[path].push(comment);
+            return acc;
+        }, {});
+
+        // Sort files alphabetically and sort comments within each file by line number
+        const sortedFiles = Object.keys(commentsByFile).sort();
+
         html += `
-            <div class="comment-section">
-                <details open>
-                    <summary class="section-header">
-                        Review Comments (${validReviewComments.length})
-                    </summary>
-                    ${validReviewComments
-                .sort((a, b) => (a.line ?? a.original_line ?? 0) - (b.line ?? b.original_line ?? 0))
-                .map(c => `
+        <div class="comment-section">
+            <details open>
+                <summary class="section-header">
+                    Review Comments (${validReviewComments.length})
+                </summary>
+                ${sortedFiles.map(filePath => {
+            const fileComments = commentsByFile[filePath].sort((a, b) =>
+                (a.line ?? a.original_line ?? 0) - (b.line ?? b.original_line ?? 0)
+            );
 
-                  <div class="comment review ${escapeHtml(c.body).includes(" bad") ? "negative" : "positive"}">
-                    <details open>
-                        <div class="shortcuts">
-                            <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
-                            <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+            return `
+                        <div class="file-group">
+                            <details open>
+                                    <summary class="file-header">
+                                        <span class="file-path" title="${escapeHtml(filePath)}">
+                                            ${escapeHtml(filePath.length <= 50 ? filePath : '...' + filePath.slice(filePath.length - 47))} (${fileComments.length})
+                                        </span>
+                                </summary>
+                                <div class="file-comments">
+                                    ${fileComments.map(c => `
+                                        <div class="comment review ${escapeHtml(c.body).includes(" bad") ? "negative" : "positive"}">
+                                            <details open>
+                                                <div class="shortcuts">
+                                                    <button class="copy-btn" data-copy="${escapeHtml(c.body)}">
+                                                        <i class='bx bxs-copy'></i><span>Copied!</span>
+                                                    </button>
+                                                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer">
+                                                        <i class='bx bx-link'></i>
+                                                    </a>
+                                                </div>
+                                                <summary class="comment-meta">
+                                                    Line • ${c.line || c.original_line}
+                                                </summary>
+                                                <div class="comment-body">
+                                                    <md-block>${escapeHtml(c.body)}</md-block>
+                                                </div>
+                                            </details>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </details>
                         </div>
-                    <summary class="comment-meta">
-                      ${escapeHtml(c.path.length <= 40 ? c.path : '...' + c.path.slice(c.path.length - 37, c.path.length))}:${c.line || c.original_line}
-                    </summary>
-                    <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
-                    </details>
-                    </div>
-
-                  `).join('')}
-                </details>
-            </div>
-          `;
+                    `;
+        }).join('')}
+            </details>
+        </div>
+    `;
     }
 
     const validReviews = reviews.filter(r => r.body);
