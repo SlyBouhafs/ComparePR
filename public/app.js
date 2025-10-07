@@ -75,6 +75,7 @@ async function loadPR(index) {
     const parsed = parsePRUrl(prUrl);
 
     if (!parsed) {
+        content.innerHTML = '';
         errorText.textContent = 'Invalid PR URL format. Use: https://github.com/owner/repo/pull/123';
         error.classList.remove('hidden');
         return;
