@@ -122,8 +122,8 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     const generalComments = comments.filter(c => c.body);
     if (generalComments.length > 0) {
         html += `
-            <div class="comment-section">\
-                    <details open >
+            <div class="comment-section">
+                    <details open>
                     <summary class="section-header">
                     💬 General Comments (${generalComments.length})
                     </summary>
