@@ -1,4 +1,4 @@
-An App that helps writing comparison reviews.
+A small webapp that helps writing and reviewing comparison PRs.
 
 1. Clone the repo.
 2. Install dependencies `npm install`
