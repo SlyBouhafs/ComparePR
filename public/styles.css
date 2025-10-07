@@ -207,6 +207,8 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 20px;
+    align-items: start;
+    justify-content: space-between;
 }
 
 .pr-pane {
@@ -215,7 +217,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    min-height: 450px;
+    min-height: 250px;
     border: 1px solid var(--current-line);
 }
 
@@ -315,7 +317,7 @@ body {
     align-items: center;
     color: var(--white-hover);
     text-align: center;
-    margin-top: 125px;
+    margin-top: 50px;
     font-size: 16px;
     justify-content: center;
 }
@@ -342,6 +344,12 @@ body {
 .pr-info p {
     font-size: 10px;
     color: var(--white);
+}
+
+.pr-info .changes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .comment-section {

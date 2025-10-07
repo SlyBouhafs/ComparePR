@@ -110,10 +110,12 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     let html = `
     <div class="pr-info">
       <h3><a href="${pr.html_url}" target="_blank" rel="noopener noreferrer"> 🔗 </a>${escapeHtml(pr.title)}</h3>
-        <p><strong>${pr.changed_files} files changed</strong> • <strong class="add"> +${pr.additions}</strong> <strong class="rem">-${pr.deletions}</strong></span>
+      <div class="changes">
+        <p><strong>${pr.changed_files <= 1 ? pr.changed_files + " file" : pr.changed_files + " files"} changed  ± </strong>
+        <p><strong class="add"> +${pr.additions}</strong> <strong class="rem">-${pr.deletions}</strong></p>
       <!-- <p><strong>#${pr.number}</strong> by ${escapeHtml(pr.user.login)}</p> -->
-      
       <!-- <p>State: ${pr.state} • Base: ${pr.base.ref} ← Head: ${pr.head.ref}</p> -->
+      </div>
     </div>
   `;
 
