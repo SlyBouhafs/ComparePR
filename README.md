@@ -15,4 +15,5 @@ Go to https://localhost:3000 start comparing PRs!
 - Dark mode by default
 - Shows all comment types (general, review, inline)  
 - Quick copy button available on every comment
+- Collapsible comments and comment sections
 - Secure token storage using browser localStorage
