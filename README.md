@@ -14,6 +14,8 @@ Go to https://localhost:3000 start comparing PRs!
 - Responsive design
 - Dark mode by default
 - Shows all comment types (general, review, inline)  
-- Quick copy button available on every comment
-- Collapsible comments and comment sections
+- Quick copy and link button on every comment
+- Comments organized by files and ordered by lines.
+- Collapsible comment sections, file sections and line sections.
+- Comments count for comment sections and files.
 - Secure token storage using browser localStorage
