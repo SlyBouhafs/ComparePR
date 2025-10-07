@@ -26,6 +26,10 @@ document.getElementById('pr1Btn').addEventListener('click', () => loadPR(1));
 document.getElementById('pr2Btn').addEventListener('click', () => loadPR(2));
 document.getElementById('pr3Btn').addEventListener('click', () => loadPR(3));
 
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text)
+};
+
 function showMainContent() {
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('mainContent').classList.remove('hidden');
@@ -126,12 +130,13 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
             <div class="comment-section">
                     <details open>
                     <summary class="section-header">
-                    💬 General Comments (${generalComments.length})
+                    General Comments (${generalComments.length})
                     </summary>
                 ${generalComments.map(c => `
                 <div class="comment general">
                 <details open>
                     <summary class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</summary>
+                    <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
                     <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
                 </details>
                 </div>
@@ -150,7 +155,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     <div class="comment-section">
         <details open>
             <summary class="section-header">
-                📄 Review Comments (${validReviewComments.length})
+                Review Comments (${validReviewComments.length})
             </summary>
             ${validReviewComments
                 .sort((a, b) => (a.line ?? a.original_line ?? 0) - (b.line ?? b.original_line ?? 0))
@@ -158,6 +163,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
 
           <div class="comment review ${escapeHtml(c.body).includes(" bad",) ? "negative" : "positive"}">
             <details open>
+            <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
             <summary class="comment-meta">
               ${escapeHtml(c.path)}:${c.line || c.original_line}
             </summary>
@@ -177,13 +183,14 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
       <div class="comment-section">
       <details open>
         <summary class="section-header">
-          🔍 Reviews (${validReviews.length})
+            Reviews (${validReviews.length})
         </summary>
         ${validReviews.map(r => `
           <div class="comment summary">
             <details open>
-              <summary class="comment-meta">${escapeHtml(r.user.login)} • ${r.state}</summary>
-              <div class="comment-body"><md-block>${escapeHtml(r.body)}</md-block></div>
+                <summary class="comment-meta">${escapeHtml(r.user.login)} • ${r.state}</summary>
+                <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
+                <div class="comment-body"><md-block>${escapeHtml(r.body)}</md-block></div>
             </details>
           </div>
         `).join('')}
@@ -193,7 +200,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     }
 
     if (generalComments.length === 0 && validReviewComments.length === 0 && validReviews.length === 0) {
-        html += '<p class="placeholder error">⚠️ No comments found for this PR.</p>';
+        html += '<p class="placeholder error">❌ No comments found for this PR.</p>';
     }
 
     container.innerHTML = html;
