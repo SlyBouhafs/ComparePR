@@ -160,8 +160,8 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                 <div class="comment general">
                 <details open>
                     <div class="shortcuts">
-                        <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
-                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx bx-link'></i></a>
+                        <button class="copy-btn" title="Copy comment" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
+                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer" title="Comment link"><i class='bx bx-link'></i></a>
                     </div>
                     <summary class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</summary>
                     <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
@@ -214,10 +214,10 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                                         <div class="comment review ${escapeHtml(c.body).includes(" bad") ? "negative" : "positive"}">
                                             <details open>
                                                 <div class="shortcuts">
-                                                    <button class="copy-btn" data-copy="${escapeHtml(c.body)}">
+                                                    <button class="copy-btn" title="Copy comment" data-copy="${escapeHtml(c.body)}">
                                                         <i class='bx bxs-copy'></i><span>Copied!</span>
                                                     </button>
-                                                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer">
+                                                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer" title="Comment link">
                                                         <i class='bx bx-link'></i>
                                                     </a>
                                                 </div>
@@ -252,8 +252,8 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
           <div class="comment summary">
             <details open>
                 <div class="shortcuts">
-                    <button class="copy-btn" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
-                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                    <button class="copy-btn" title="Copy comment" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
+                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer" title="Comment link"><i class='bx  bx-link'  ></i></a>
                 </div>
                 <summary class="comment-meta">${escapeHtml(r.user.login)} • ${r.state}</summary>
                 <div class="comment-body"><md-block>${escapeHtml(r.body)}</md-block></div>

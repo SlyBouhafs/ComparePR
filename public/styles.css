@@ -443,9 +443,11 @@ body {
 .comment-body md-block pre {
     background: var(--lighter-background);
     border-radius: var(--border-radius);
-    padding: 8px;
+    padding: 5px;
+    margin: 5px 0px;
     overflow-x: auto;
     tab-size: 4;
+    border: 1px solid var(--current-line);
 }
 
 .comment-body md-block code {
@@ -462,8 +464,8 @@ body {
 .comment .shortcuts {
     border: 1px solid var(--current-line);
     border-radius: var(--border-radius);
-    background: rgb(from var(--lighter-background) r g b / 50%);
-    padding: 3px 2px 0px 2px;
+    background: var(--lighter-background);
+    padding: 4px 4px 0px 4px;
     visibility: hidden;
     opacity: 0;
     transition: all 0.2s;
