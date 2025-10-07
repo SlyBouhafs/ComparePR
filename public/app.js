@@ -113,19 +113,22 @@ async function loadPR(index) {
 function renderPRContent(container, pr, comments, reviewComments, reviews) {
     console.log(pr);
     let html = `
-    <div class="pr-info">
-        <div class="pr-header">
-        <h3>${escapeHtml(pr.title)}</h3>
-        <a href="${pr.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a> 
+        <div class="pr-info">
+            <div class="pr-header">
+                <h3>${escapeHtml(pr.title)}</h3>
+                <a href="${pr.html_url}" target="_blank" rel="noopener noreferrer"> <i class='bx  bx-git-pull-request'  ></i></a> 
+            </div>
+            <div class="changes">
+                <p>${pr.changed_files <= 1 ? pr.changed_files + " file" : pr.changed_files + " files"} changed</p>
+                <div class="lines">
+                    <p> ± </p>
+                    <p><span class="add">  +${pr.additions}</span> <span class="rem">-${pr.deletions}</span></p>
+                </div>
+                <!-- <p><strong>#${pr.number}</strong> by ${escapeHtml(pr.user.login)}</p> -->
+                <!-- <p>State: ${pr.state} • Base: ${pr.base.ref} ← Head: ${pr.head.ref}</p> -->
+            </div>
         </div>
-        <div class="changes">
-        <p><strong>${pr.changed_files <= 1 ? pr.changed_files + " file" : pr.changed_files + " files"} changed  ± </strong>
-        <p><strong class="add"> +${pr.additions}</strong> <strong class="rem">-${pr.deletions}</strong></p>
-      <!-- <p><strong>#${pr.number}</strong> by ${escapeHtml(pr.user.login)}</p> -->
-      <!-- <p>State: ${pr.state} • Base: ${pr.base.ref} ← Head: ${pr.head.ref}</p> -->
-      </div>
-    </div>
-  `;
+    `;
 
     const generalComments = comments.filter(c => c.body);
     if (generalComments.length > 0) {
@@ -138,9 +141,11 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                 ${generalComments.map(c => `
                 <div class="comment general">
                 <details open>
-                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx bx-link'></i></a>
+                    <div class="shortcuts">
+                        <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
+                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                    </div>
                     <summary class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</summary>
-                    <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
                     <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
                 </details>
                 </div>
@@ -156,30 +161,32 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     const validReviewComments = reviewComments.filter(c => c.body);
     if (validReviewComments.length > 0) {
         html += `
-    <div class="comment-section">
-        <details open>
-            <summary class="section-header">
-                Review Comments (${validReviewComments.length})
-            </summary>
-            ${validReviewComments
+            <div class="comment-section">
+                <details open>
+                    <summary class="section-header">
+                        Review Comments (${validReviewComments.length})
+                    </summary>
+                    ${validReviewComments
                 .sort((a, b) => (a.line ?? a.original_line ?? 0) - (b.line ?? b.original_line ?? 0))
                 .map(c => `
 
-          <div class="comment review ${escapeHtml(c.body).includes(" bad",) ? "negative" : "positive"}">
-            <details open>
-            <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
-            <summary class="comment-meta">
-              ${escapeHtml(c.path)}:${c.line || c.original_line}
-            </summary>
-            <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
-            <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
-            </details>
-            </div>
+                  <div class="comment review ${escapeHtml(c.body).includes(" bad") ? "negative" : "positive"}">
+                    <details open>
+                    <div class="shortcuts">
+                        <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
+                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                    </div>
+                    <summary class="comment-meta">
+                      ${escapeHtml(c.path)}:${c.line || c.original_line}
+                    </summary>
+                    <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
+                    </details>
+                    </div>
 
-          `).join('')}
-        </details>
-    </div>
-  `;
+                  `).join('')}
+                </details>
+            </div>
+          `;
     }
 
     const validReviews = reviews.filter(r => r.body);
@@ -193,9 +200,11 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
         ${validReviews.map(r => `
           <div class="comment summary">
             <details open>
-                <a href="${r.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                    <div class="shortcuts">
+                        <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
+                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                    </div>
                 <summary class="comment-meta">${escapeHtml(r.user.login)} • ${r.state}</summary>
-                <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(r.body)}')"><i class='bx bxs-copy'></i></button>
                 <div class="comment-body"><md-block>${escapeHtml(r.body)}</md-block></div>
             </details>
           </div>

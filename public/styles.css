@@ -346,10 +346,13 @@ body {
     font-size: 16px;
     font-weight: 600;
     line-height: 1.4;
+    display: flex;
+    gap: 5px;
+    align-items: center;
 }
 
 .pr-info p {
-    font-size: 10px;
+    font-size: 12px;
     color: var(--white);
 }
 
@@ -357,6 +360,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+}
+
+.pr-info .changes .lines {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: -webkit-fill-available;
+    flex-wrap: nowrap;
 }
 
 .pr-info .pr-header {
@@ -372,6 +383,7 @@ body {
     padding: 10px;
     border-radius: var(--border-radius);
     border: 1px solid var(--current-line);
+    transition: all 0.2s;
 }
 
 .section-header {
@@ -453,30 +465,29 @@ details ::marker {
 
 }
 
-details .copy-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
+details .shortcuts {
     position: absolute;
     top: 0px;
     right: -5px;
     height: 16px;
-
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 
-details .copy-btn i {
+details .copy-btn i,
+details .copy-btn {
     font-size: 16px;
     color: var(--white);
+    background: none;
+    border: none;
     transition: all 0.2s;
+    cursor: pointer;
 }
 
 details a i {
     color: var(--cyan);
-    text-decoration: none;
-    position: absolute;
-    top: 0px;
-    right: 20px;
     transition: all 0.2s;
 }
 
@@ -494,12 +505,21 @@ a:active {
 
 .add {
     color: var(--red);
-    font-weight: 600;
 }
 
 .rem {
     color: var(--green);
-    font-weight: 600;
+}
+
+.comment .shortcuts {
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.2s;
+}
+
+.comment:hover .shortcuts {
+    visibility: visible;
+    opacity: 1;
 }
 
 a {
