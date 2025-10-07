@@ -465,19 +465,30 @@ details ::marker {
 
 }
 
-details .shortcuts {
+.comment .shortcuts {
+    border: 1px solid var(--current-line);
+    border-radius: var(--border-radius);
+    background: rgb(from var(--lighter-background) r g b / 50%);
+    padding: 5px 3px 2px 3px;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.2s;
     position: absolute;
     top: 0px;
     right: -5px;
-    height: 16px;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    align-items: center;
 }
 
+.comment:hover .shortcuts {
+    visibility: visible;
+    opacity: 1;
+}
 
-details .copy-btn i,
-details .copy-btn {
+.shortcuts .copy-btn i,
+.shortcuts .copy-btn {
     font-size: 16px;
     color: var(--white);
     background: none;
@@ -486,19 +497,19 @@ details .copy-btn {
     cursor: pointer;
 }
 
-details a i {
+.shortcuts a i {
     color: var(--cyan);
     transition: all 0.2s;
 }
 
-details a i:hover,
-details .copy-btn i:hover,
+.shortcuts a i:hover,
+.shortcuts .copy-btn i:hover,
 a:hover {
     color: var(--f-cyan);
 }
 
-details .copy-btn i:active,
-details a i:active,
+.shortcuts .copy-btn i:active,
+.shortcuts a i:active,
 a:active {
     color: var(--cyan);
 }
@@ -509,17 +520,6 @@ a:active {
 
 .rem {
     color: var(--green);
-}
-
-.comment .shortcuts {
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.2s;
-}
-
-.comment:hover .shortcuts {
-    visibility: visible;
-    opacity: 1;
 }
 
 a {

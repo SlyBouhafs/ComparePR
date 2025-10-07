@@ -173,11 +173,11 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                   <div class="comment review ${escapeHtml(c.body).includes(" bad") ? "negative" : "positive"}">
                     <details open>
                     <div class="shortcuts">
-                        <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
-                        <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
+                    <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(c.body)}')"><i class='bx bxs-copy'></i></button>
+                    <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
                     </div>
                     <summary class="comment-meta">
-                      ${escapeHtml(c.path.length <= 35 ? c.path : '...' + c.path.slice(c.path.length - 35, c.path.length))}:${c.line || c.original_line}
+                      ${escapeHtml(c.path.length <= 40 ? c.path : '...' + c.path.slice(c.path.length - 37, c.path.length))}:${c.line || c.original_line}
                     </summary>
                     <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
                     </details>
