@@ -177,7 +177,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                         <a href="${c.html_url}" target="_blank" rel="noopener noreferrer"><i class='bx  bx-link'  ></i></a>
                     </div>
                     <summary class="comment-meta">
-                      ${escapeHtml(c.path)}:${c.line || c.original_line}
+                      ${escapeHtml(c.path.length <= 35 ? c.path : '...' + c.path.slice(c.path.length - 35, c.path.length))}:${c.line || c.original_line}
                     </summary>
                     <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
                     </details>
