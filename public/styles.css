@@ -351,15 +351,13 @@ body {
     align-items: center;
 }
 
-.pr-info p {
-    font-size: 12px;
-    color: var(--white);
-}
 
 .pr-info .changes {
+    color: var(--white);
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    font-size: 12px;
 }
 
 .pr-info .changes .lines {
@@ -368,6 +366,7 @@ body {
     justify-content: space-between;
     min-width: -webkit-fill-available;
     flex-wrap: nowrap;
+    font-size: 12px;
 }
 
 .pr-info .pr-header {
@@ -529,10 +528,12 @@ a:active {
 
 .add {
     color: var(--red);
+    font-size: 10px;
 }
 
 .rem {
     color: var(--green);
+    font-size: 10px;
 }
 
 a {
