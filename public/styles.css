@@ -336,7 +336,7 @@ body {
     padding: 16px;
     margin-bottom: 20px;
     border: 1px solid var(--current-line);
-    border-left: 4px solid var(--orange);
+    border-left: 3px solid var(--orange);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -416,7 +416,7 @@ body {
     background: var(--light-background);
     border: 1px solid var(--current-line);
     border-radius: var(--border-radius);
-    border-left: 3px solid;
+    border-left: 2px solid;
 }
 
 .comment:last-child {
