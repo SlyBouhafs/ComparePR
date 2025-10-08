@@ -491,12 +491,6 @@ details {
     position: relative;
 }
 
-
-details ::marker {
-    color: var(--comment);
-
-}
-
 .shortcuts .copy-btn i,
 .shortcuts .copy-btn {
     font-size: 16px;
@@ -530,10 +524,10 @@ a:active {
     color: var(--white);
     font-weight: 600;
     position: absolute;
-    bottom: 25px;
+    bottom: 30px;
     visibility: hidden;
     opacity: 0;
-    left: -8px;
+    left: 20px;
     transition: all 0.2s;
 }
 
