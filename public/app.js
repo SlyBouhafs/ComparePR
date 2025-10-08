@@ -140,7 +140,12 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                 <p>${pr.changed_files <= 1 ? pr.changed_files + " file" : pr.changed_files + " files"} changed</p>
                 <div class="lines">
                     <p> ± </p>
-                    <p><span class="add">  +${pr.additions}</span> <span class="rem">-${pr.deletions}</span></p>
+                    <p><span class="add"> +${pr.additions}</span><span class="rem"> -${pr.deletions}</span></p>
+                    <p class="blocks">
+                        ${pr.additions >= pr.deletions ?
+            "<i class='bx bxs-square add'></i><i class='bx bxs-square add'></i><i class='bx bxs-square rem'></i>" :
+            "<i class='bx bxs-square add'></i><i class='bx bxs-square rem'></i><i class='bx bxs-square red'></i>"}
+                    </p>
                 </div>
                 <!-- <p><strong>#${pr.number}</strong> by ${escapeHtml(pr.user.login)}</p> -->
                 <!-- <p>State: ${pr.state} • Base: ${pr.base.ref} ← Head: ${pr.head.ref}</p> -->
@@ -222,7 +227,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                                                     </a>
                                                 </div>
                                                 <summary class="comment-meta">
-                                                    Line • ${c.line || c.original_line}
+                                                    Line: ${c.line || c.original_line}
                                                 </summary>
                                                 <div class="comment-body">
                                                     <md-block>${escapeHtml(c.body)}</md-block>

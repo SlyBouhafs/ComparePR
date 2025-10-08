@@ -344,12 +344,12 @@ body {
 }
 
 .pr-info h3 {
-    font-size: 16px;
     font-weight: 600;
     line-height: 1.4;
     display: flex;
     gap: 5px;
     align-items: center;
+    text-transform: uppercase;
 }
 
 
@@ -370,11 +370,23 @@ body {
     font-size: 12px;
 }
 
+.pr-info .changes .blocks {
+    display: flex;
+}
+
+.pr-info .changes .blocks i {
+    top: 1px;
+    position: relative;
+    font-size: 9px;
+}
+
 .pr-info .pr-header {
     display: flex;
     gap: 5px;
     flex-direction: row;
     align-items: flex-end;
+    font-size: 18px;
+    text-transform: uppercase;
 }
 
 .comment-section {
@@ -395,6 +407,7 @@ body {
     gap: 8px;
     font-size: 16px;
     font-weight: 600;
+    text-transform: uppercase;
 }
 
 .comment {
@@ -554,12 +567,12 @@ a:active {
 }
 
 .add {
-    color: var(--red);
+    color: var(--green);
     font-size: 10px;
 }
 
 .rem {
-    color: var(--green);
+    color: var(--red);
     font-size: 10px;
 }
 
