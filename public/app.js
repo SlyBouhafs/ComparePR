@@ -114,6 +114,8 @@ function setupEditButtons(container) {
             const textarea = document.createElement('textarea');
             textarea.className = 'edit-textarea';
             textarea.value = originalText;
+            textarea.setAttribute('spellcheck', 'true'); // Enable spell check
+            textarea.setAttribute('lang', 'en'); // Set language
 
             // Create button container
             const btnContainer = document.createElement('div');
