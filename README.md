@@ -2,7 +2,7 @@ A small webapp that helps writing and reviewing comparison PRs.
 
 1. Clone the repo.
 2. Install dependencies `npm install`
-3. Run the app `npm run`
+3. Run the app `npm start`
 
 Go to https://localhost:3000 start comparing PRs!
 
