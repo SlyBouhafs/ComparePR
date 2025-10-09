@@ -26,12 +26,26 @@ document.getElementById('pr1Btn').addEventListener('click', () => loadPR(1));
 document.getElementById('pr2Btn').addEventListener('click', () => loadPR(2));
 document.getElementById('pr3Btn').addEventListener('click', () => loadPR(3));
 
-document.addEventListener('click', e => {
-    const btn = e.target.closest('.copy-btn');
-    if (!btn) return;
-    const content = btn.dataset.copy;
-    copyToClipboard(content, btn);
-});
+
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    if (type === 'info') notification.innerHTML = `<i class="bx bx-info-circle"></i> <span>${message}</span>`;
+    if (type === 'success') notification.innerHTML = `<i class="bx bx-check-circle"></i> <span>${message}</span>`;
+    if (type === 'error') notification.innerHTML = `<i class="bx bx-x-circle"></i> <span>${message}</span>`;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
 
 async function copyToClipboard(content, element) {
     try {
@@ -47,6 +61,169 @@ async function copyToClipboard(content, element) {
         console.error('Failed to copy text:', err);
     }
 }
+
+function setupCopyButtons() {
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('.copy-btn');
+        if (!btn) return;
+        const content = btn.dataset.copy;
+        copyToClipboard(content, btn);
+    });
+}
+
+
+function setupEditButtons(container) {
+
+    const editButtons = container.querySelectorAll('.edit-btn');
+
+    editButtons.forEach((btn, index) => {
+
+        // Remove any existing listeners
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const commentDiv = this.closest('.comment');
+            if (!commentDiv) {
+                console.error('Could not find comment div');
+                return;
+            }
+
+            const commentBody = commentDiv.querySelector('.comment-body');
+            if (!commentBody) {
+                console.error('Could not find comment body');
+                return;
+            }
+
+            const originalText = this.dataset.text;
+            const commentId = this.dataset.commentId;
+            const commentType = this.dataset.commentType;
+
+            console.log('Comment data:', { originalText, commentId, commentType });
+
+            // Check if already editing
+            if (commentBody.querySelector('textarea')) {
+                console.log('Already editing');
+                return;
+            }
+
+            // Create textarea
+            const textarea = document.createElement('textarea');
+            textarea.className = 'edit-textarea';
+            textarea.value = originalText;
+
+            // Create button container
+            const btnContainer = document.createElement('div');
+            btnContainer.className = 'edit-actions';
+
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'save-btn';
+            saveBtn.innerHTML = '<i class="bx bxs-save"></i>';
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'cancel-btn';
+            cancelBtn.innerHTML = '<i class="bx bxs-x"></i>';
+
+            btnContainer.appendChild(saveBtn);
+            btnContainer.appendChild(cancelBtn);
+
+            // Replace content with textarea
+            commentBody.innerHTML = '';
+            commentBody.appendChild(textarea);
+            commentBody.appendChild(btnContainer);
+
+            // Focus textarea
+            textarea.focus();
+            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+
+            // Cancel button
+            cancelBtn.addEventListener('click', () => {
+                commentBody.innerHTML = `<md-block>${escapeHtml(originalText)}</md-block>`;
+            });
+
+            // Save button - sync with GitHub
+            saveBtn.addEventListener('click', async () => {
+                const newText = textarea.value.trim();
+
+                if (!newText) {
+                    alert('Comment cannot be empty');
+                    return;
+                }
+
+                if (newText === originalText) {
+                    commentBody.innerHTML = `<md-block>${escapeHtml(originalText)}</md-block>`;
+                    return;
+                }
+
+                // Disable button and show loading
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="bx bx-loader-dots bx-spin"></i>';
+
+                try {
+                    // Determine the API URL based on comment type
+                    const prUrlMatch = window.currentPRUrl.match(/github\.com\/([^\/]+)\/([^\/]+)\/pull\/(\d+)/);
+                    if (!prUrlMatch) {
+                        throw new Error('Invalid PR URL');
+                    }
+
+                    const [, owner, repo] = prUrlMatch;
+                    let apiUrl;
+
+                    if (commentType === 'issue') {
+                        apiUrl = `https://api.github.com/repos/${owner}/${repo}/issues/comments/${commentId}`;
+                    } else if (commentType === 'review') {
+                        apiUrl = `https://api.github.com/repos/${owner}/${repo}/pulls/comments/${commentId}`;
+                    } else {
+                        throw new Error('Unknown comment type');
+                    }
+
+                    const response = await fetch('/api/github-comment', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            url: apiUrl,
+                            token: token,
+                            body: newText
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Failed to update comment');
+                    }
+
+                    // Success - update UI
+                    newBtn.dataset.text = newText;
+                    commentBody.innerHTML = `<md-block>${escapeHtml(newText)}</md-block>`;
+
+                    // Add edited indicator
+                    const commentMeta = commentDiv.querySelector('.comment-meta');
+                    if (commentMeta && !commentMeta.querySelector('.edited-badge')) {
+                        const editedBadge = document.createElement('span');
+                        editedBadge.className = 'edited-badge';
+                        editedBadge.textContent = '(edited)';
+                        commentMeta.appendChild(editedBadge);
+                    }
+
+                    // Show success message
+                    showNotification('Comment updated successfully!', 'success');
+
+                } catch (error) {
+                    console.error('Error updating comment:', error);
+                    alert('Failed to update comment: ' + error.message);
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<i class="bx bxs-save"></i>';
+                }
+            });
+        });
+    });
+}
+
 
 function showMainContent() {
     document.getElementById('loginScreen').classList.add('hidden');
@@ -95,6 +272,8 @@ async function loadPR(index) {
 
     const prUrl = input.value;
     const parsed = parsePRUrl(prUrl);
+    window.currentPRUrl = prUrl; // Store for edit function
+
 
     if (!parsed) {
         content.innerHTML = '';
@@ -167,6 +346,9 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                     <div class="shortcuts">
                         <button class="copy-btn" title="Copy comment" data-copy="${escapeHtml(c.body)}"><i class='bx bxs-copy'></i><span>Copied!</span></button>
                         <a href="${c.html_url}" target="_blank" rel="noopener noreferrer" title="Comment link"><i class='bx bx-link'></i></a>
+                        <button class="edit-btn" title="Edit comment" data-text="${escapeHtml(c.body)}" data-comment-id="${c.id}" data-comment-type="issue">
+                        <i class='bx bxs-edit'></i>
+                        </button>
                     </div>
                     <summary class="comment-meta">${escapeHtml(c.user.login)} • ${new Date(c.created_at).toLocaleString()}</summary>
                     <div class="comment-body"><md-block>${escapeHtml(c.body)}</md-block></div>
@@ -225,6 +407,9 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                                                     <a href="${c.html_url}" target="_blank" rel="noopener noreferrer" title="Comment link">
                                                         <i class='bx bx-link'></i>
                                                     </a>
+                                                    <button class="edit-btn" title="Edit comment" data-text="${escapeHtml(c.body)}" data-comment-id="${c.id}" data-comment-type="review">
+                                                    <i class='bx bxs-edit'></i>
+                                                    </button>
                                                 </div>
                                                 <summary class="comment-meta">
                                                     Line: ${c.line || c.original_line}
@@ -271,10 +456,14 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
     }
 
     if (generalComments.length === 0 && validReviewComments.length === 0 && validReviews.length === 0) {
-        html += '<p class="placeholder error">❌ No comments found for this PR.</p>';
+        html += '<p class="placeholder error"><i class="bx bx-x-circle add"></i> No comments found for this PR.</p>';
     }
 
     container.innerHTML = html;
+
+    setupEditButtons(container);
+    setupCopyButtons();
+
 }
 
 function escapeHtml(text) {

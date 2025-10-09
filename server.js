@@ -47,6 +47,33 @@ app.post('/api/github-proxy', async (req, res) => {
     }
 });
 
+app.patch('/api/github-comment', async (req, res) => {
+    const { url, token, body } = req.body;
+
+    if (!url || !token || !body) {
+        return res.status(400).json({ error: 'URL, token, and body are required' });
+    }
+
+    try {
+        const response = await axios.patch(url,
+            { body }, // Request body
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            }
+        );
+
+        res.json(response.data);
+    } catch (error) {
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message;
+        res.status(status).json({ error: message });
+    }
+});
+
 // Catch-all route for SPA - must be last
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));

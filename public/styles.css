@@ -18,11 +18,15 @@ html {
     --white: #f8f8f2;
     --white-hover: #f8f8f280;
     --red: #ff5555;
+    --red-hover: #ff555580;
     --f-red: #DE5735;
     --orange: #ffb86c;
+    --orange-hover: #ffb86c80;
     --f-orange: #A39514;
     --yellow: #f1fa8c;
+    --yellow-hover: #f1fa8c80;
     --green: #50fa7b;
+    --green-hover: #50fa7b80;
     --f-green: #089108;
     --purple: #bd93f9;
     --f-purple: #815CD6;
@@ -504,6 +508,8 @@ details {
     position: relative;
 }
 
+.shortcuts button,
+.shortcuts .edit-btn i,
 .shortcuts .copy-btn i,
 .shortcuts .copy-btn {
     font-size: 16px;
@@ -521,12 +527,14 @@ details {
 
 .shortcuts a i:hover,
 .shortcuts .copy-btn i:hover,
+.shortcuts .edit-btn i:hover,
 a:hover {
     color: var(--f-cyan);
 }
 
 .shortcuts .copy-btn i:active,
 .shortcuts a i:active,
+.shortcuts .edit-btn i:active,
 a:active {
     color: var(--cyan);
 }
@@ -580,6 +588,133 @@ a {
     color: var(--cyan);
     transition: all 0.2s;
     text-decoration: none;
+}
+
+/* Edit textarea */
+.edit-textarea {
+    color: var(--white);
+    width: 100%;
+    padding: 10px;
+    field-sizing: content;
+    min-height: fit-content;
+    border: 1px solid var(--current-line);
+    border-radius: var(--border-radius);
+    font-size: 13px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 5px;
+    background: var(--lighter-background);
+}
+
+.edit-textarea:focus {
+    outline: none;
+    border-color: var(--comment);
+}
+
+/* Edit action buttons */
+.edit-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.save-btn,
+.cancel-btn {
+    padding: 8px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 22px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.save-btn {
+    background: var(--green);
+    color: var(--darker-background);
+}
+
+.save-btn:hover:not(:disabled) {
+    background: var(--green-hover);
+}
+
+.save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    background: var(--white);
+    color: var(--dark-background);
+}
+
+.cancel-btn:hover {
+    background: var(--white-hover);
+}
+
+.edited-badge {
+    color: var(--yellow-hover);
+    font-size: 10px;
+    font-weight: 400;
+    margin-left: 8px;
+}
+
+/* Notification */
+.notification {
+    position: fixed;
+    top: 25px;
+    right: 45%;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: var(--background);
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10000;
+    opacity: 1;
+    transform: translateY(-25px);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--white);
+}
+
+.notification i {
+    font-size: 18px;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification-success {
+    border: 1px solid var(--green);
+}
+
+.notification-error {
+    border: 1px solid var(--red);
+}
+
+.notification-info {
+    border: 1px solid var(--yellow);
+
+}
+
+.notification-success i {
+    color: var(--green);
+}
+
+.notification-error i {
+    color: var(--red);
+}
+
+.notification-info i {
+    color: var(--yellow);
+
 }
 
 @media (max-width: 1200px) {
