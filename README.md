@@ -18,4 +18,5 @@ Go to https://localhost:3000 start comparing PRs!
 - Comments organized by files and ordered by lines.
 - Collapsible comment sections, file sections and line sections.
 - Comments count for comment sections and files.
+- Supports comments editing.
 - Secure token storage using browser localStorage
