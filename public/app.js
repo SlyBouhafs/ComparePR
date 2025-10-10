@@ -395,7 +395,7 @@ function renderPRContent(container, pr, comments, reviewComments, reviews) {
                             <details open>
                                     <summary class="file-header">
                                         <span class="file-path" title="${escapeHtml(filePath)}">
-                                            ${escapeHtml(filePath.length <= 50 ? filePath : '...' + filePath.slice(filePath.length - 47))} (${fileComments.length})
+                                            ${escapeHtml(filePath.length <= 42 ? filePath : '...' + filePath.slice(filePath.length - 39))} (${fileComments.length})
                                         </span>
                                 </summary>
                                 <div class="file-comments">
