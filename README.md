@@ -19,4 +19,5 @@ Go to https://localhost:3000 start comparing PRs!
 - Collapsible comment sections, file sections and line sections.
 - Comments count for comment sections and files.
 - Supports comments editing.
+- Markdown support.
 - Secure token storage using browser localStorage
